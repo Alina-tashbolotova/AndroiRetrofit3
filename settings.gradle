@@ -1,0 +1,2 @@
+rootProject.name = "AndroiRetrofit3"
+include ':app'

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_character">
+
+    <fragment
+        android:id="@+id/navigation_character"
+        android:name="com.example.androiretrofit3.ui.fragments.character.CharacterFragment"
+        android:label="Character"
+        tools:layout="@layout/fragment_character">
+        <action
+            android:id="@+id/action_navigation_character_to_navigation_characterDetail"
+            app:destination="@id/navigation_characterDetail" />
+        <action
+            android:id="@+id/action_navigation_character_to_characterDialogFragment"
+            app:destination="@id/characterDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_characterDetail"
+        android:name="com.example.androiretrofit3.ui.fragments.character.detail.CharacterDetailFragment"
+        android:label="CharacterDetail"
+        tools:layout="@layout/fragment_character_detail">
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_episode"
+        android:name="com.example.androiretrofit3.ui.fragments.episode.EpisodeFragment"
+        android:label="Episode"
+        tools:layout="@layout/fragment_episode">
+        <action
+            android:id="@+id/action_navigation_episode_to_episodeDetailFragment"
+            app:destination="@id/episodeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_location"
+        android:name="com.example.androiretrofit3.ui.fragments.location.LocationFragment"
+        android:label="Location"
+        tools:layout="@layout/fragment_location">
+        <action
+            android:id="@+id/action_navigation_location_to_locationDetailFragment"
+            app:destination="@id/locationDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/episodeDetailFragment"
+        android:name="com.example.androiretrofit3.ui.fragments.episode.detail.EpisodeDetailFragment"
+        android:label="EpisodeDetail"
+        tools:layout="@layout/fragment_episode_detail">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/locationDetailFragment"
+        android:name="com.example.androiretrofit3.ui.fragments.location.detail.LocationDetailFragment"
+        android:label="LocationDetail"
+        tools:layout="@layout/fragment_location_detail">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+    <dialog
+        android:id="@+id/characterDialogFragment"
+        android:name="com.example.androiretrofit3.ui.fragments.character.CharacterDialogFragment"
+        android:label="fragment_character_dialog"
+        tools:layout="@layout/fragment_character_dialog">
+        <argument
+            android:name="Photo"
+            app:argType="string" />
+    </dialog>
+</navigation>

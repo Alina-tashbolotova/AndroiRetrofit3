@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">AndroiRetrofit3</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="character">Character</string>
+    <string name="episode">Episode</string>
+    <string name="location">Location</string>
+    <string name="name">Name</string>
+    <string name="status">Status</string>
+    <string name="created" />
+    <string name="todo">TODO</string>
+    <string name="character_id">Character ID</string>
+    <string name="id">ID</string>
+    <string name="characters_name">Characters Name</string>
+    <string name="type">Type</string>
+    <string name="episode_id">Episode Id</string>
+    <string name="episode_name">Episode Name</string>
+    <string name="created_hint">Created</string>
+    <string name="created_2">Created</string>
+    <string name="air_date">Air Date</string>
+    <string name="location_id">Location Id</string>
+    <string name="location_name">Location Name</string>
+    <string name="dimension">Dimension</string>
+</resources>

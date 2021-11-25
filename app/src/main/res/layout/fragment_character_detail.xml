@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp5"
+    android:backgroundTint="@color/gray"
+    app:cardCornerRadius="@dimen/dp25"
+    tools:context=".ui.fragments.character.detail.CharacterDetailFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_item_character_detail"
+            android:layout_width="@dimen/dp100"
+            android:layout_height="@dimen/dp100"
+            android:layout_marginStart="@dimen/dp15"
+            android:layout_marginTop="@dimen/dp40"
+            android:contentDescription="@string/todo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/txt_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp25"
+            android:layout_marginTop="@dimen/dp5"
+            android:hint="@string/character_id"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintLeft_toRightOf="@id/image_item_character_detail"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_item_id_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp175"
+            android:layout_marginTop="@dimen/dp5"
+            android:text="@string/id"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_id" />
+
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp140"
+            android:layout_marginTop="@dimen/dp5"
+            android:hint="@string/characters_name"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_item_id_detail" />
+
+        <TextView
+            android:id="@+id/txt_item_name_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp165"
+            android:layout_marginTop="@dimen/dp5"
+            android:text="@string/name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_name" />
+
+        <TextView
+            android:id="@+id/txt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp140"
+            android:layout_marginTop="@dimen/dp5"
+            android:hint="@string/status"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_item_name_detail" />
+
+        <TextView
+            android:id="@+id/txt_item_status_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp165"
+            android:layout_marginTop="@dimen/dp5"
+            android:text="@string/status"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_status" />
+
+        <TextView
+            android:id="@+id/txt_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp140"
+            android:layout_marginTop="@dimen/dp5"
+            android:hint="@string/type"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_item_status_detail" />
+
+        <TextView
+            android:id="@+id/txt_item_character_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp165"
+            android:layout_marginTop="@dimen/dp5"
+            android:text="@string/type"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_type" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_character_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
