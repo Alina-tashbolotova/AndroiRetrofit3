@@ -23,6 +23,20 @@ public class LocationAdapter extends ListAdapter<LocationModel, LocationAdapter.
         super(new LocationDiffUtil());
     }
 
+    public static class LocationDiffUtil extends DiffUtil.ItemCallback<LocationModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
+            return oldItem == newItem;
+        }
+    }
+
     @NonNull
     @Override
     public LocationAdapter.LocationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,19 +53,6 @@ public class LocationAdapter extends ListAdapter<LocationModel, LocationAdapter.
         this.onItemClickListener = clickListener;
     }
 
-    public static class LocationDiffUtil extends DiffUtil.ItemCallback<LocationModel> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        @Override
-        public boolean areContentsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
-            return oldItem == newItem;
-        }
-    }
 
     public class LocationViewHolder extends RecyclerView.ViewHolder {
 

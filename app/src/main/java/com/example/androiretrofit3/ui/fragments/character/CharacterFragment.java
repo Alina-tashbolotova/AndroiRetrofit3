@@ -38,6 +38,12 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
         setupRecycler();
     }
 
+    private void setupRecycler() {
+        linearLayoutManager = new LinearLayoutManager(requireContext());
+        binding.recyclerCharacter.setLayoutManager(linearLayoutManager);
+        binding.recyclerCharacter.setAdapter(characterAdapter);
+    }
+
     @Override
     protected void setupListeners() {
         characterAdapter.setOnItemClickListener(id -> Navigation.findNavController(requireView()).navigate(
@@ -56,11 +62,27 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    visibleItemCount = linearLayoutManager.getItemCount();
+                    viewModel.liveDataCharacter().observe(getViewLifecycleOwner(), isLoading -> {
+                        if (isLoading) {
+                            binding.progressBarCharacterPage.setVisibility(View.GONE);
+                            binding.recyclerCharacter.setVisibility(View.VISIBLE);
+                            binding.progressBarCharacter.setVisibility(View.GONE);
+                            binding.progressBarCharacterPage.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.progressBarCharacterPage.setVisibility(View.GONE);
+                        }
+                    });
+                    visibleItemCount = linearLayoutManager.getChildCount();
                     totalItemCount = linearLayoutManager.getItemCount();
                     postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
                     if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
                         viewModel.page++;
+                        viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterModel -> {
+                            if (characterModel != null) {
+                                characterAdapter.submitList(characterModel.getResult());
+                            }
+                        });
+
                     }
                 }
             }
@@ -81,18 +103,11 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
         });
     }
 
-    private void setupRecycler() {
-        linearLayoutManager = new LinearLayoutManager(requireContext());
-        binding.recyclerCharacter.setLayoutManager(linearLayoutManager);
-        binding.recyclerCharacter.setAdapter(characterAdapter);
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }
     
     

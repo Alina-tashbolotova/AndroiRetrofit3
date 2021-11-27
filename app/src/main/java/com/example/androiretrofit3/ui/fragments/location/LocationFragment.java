@@ -6,12 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiretrofit3.base.BaseFragment;
+import com.example.androiretrofit3.data.models.RickAndMortyResponse;
+import com.example.androiretrofit3.data.models.location.LocationModel;
 import com.example.androiretrofit3.databinding.FragmentLocationBinding;
 import com.example.androiretrofit3.ui.adapters.LocationAdapter;
 
@@ -54,17 +57,43 @@ public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLo
     @Override
     protected void setupRequest() {
         viewModel.fetchLocations();
-        binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    visibleItemCount = linearLayoutManager.getItemCount();
-                    totalItemCount = linearLayoutManager.getItemCount();
-                    postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                    if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
-                        viewModel.page++;
-                    }
+        viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
+            if (locationModel != null) {
+                locationAdapter.submitList(locationModel.getResult());
+                String next = locationModel.getInfo().getNext();
+                if (next != null) {
+                    binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            if (dy > 0) {
+                                viewModel.liveDataLocation().observe(getViewLifecycleOwner(), isLoading -> {
+                                    if (isLoading) {
+                                        binding.progressBarLocationPage.setVisibility(View.GONE);
+                                        binding.recyclerLocation.setVisibility(View.VISIBLE);
+                                        binding.progressBarLocation.setVisibility(View.GONE);
+                                        binding.progressBarLocationPage.setVisibility(View.VISIBLE);
+                                    } else {
+                                        binding.progressBarLocationPage.setVisibility(View.GONE);
+                                    }
+                                });
+                                visibleItemCount = linearLayoutManager.getChildCount();
+                                totalItemCount = linearLayoutManager.getItemCount();
+                                postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+                                if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
+                                    viewModel.page++;
+                                    viewModel.fetchLocations().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<LocationModel>>() {
+                                        @Override
+                                        public void onChanged(RickAndMortyResponse<LocationModel> locationModel) {
+                                            if (locationModel != null) {
+                                                locationAdapter.submitList(locationModel.getResult());
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });

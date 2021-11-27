@@ -23,22 +23,6 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Epi
         super(new EpisodeDiffUtil());
     }
 
-    @NonNull
-    @Override
-    public EpisodeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new EpisodeViewHolder(
-                ItemEpisodeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull EpisodeViewHolder holder, int position) {
-        holder.onBind(getItem(position));
-    }
-
-    public void setOnItemClickListener(OnItemClickListener clickListener) {
-        this.onItemClickListener = clickListener;
-    }
-
     public static class EpisodeDiffUtil extends DiffUtil.ItemCallback<EpisodeModel> {
 
         @Override
@@ -51,6 +35,22 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Epi
         public boolean areContentsTheSame(@NonNull @NotNull EpisodeModel oldItem, @NonNull @NotNull EpisodeModel newItem) {
             return oldItem == newItem;
         }
+    }
+
+    @NonNull
+    @Override
+    public EpisodeAdapter.EpisodeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new EpisodeViewHolder(
+                ItemEpisodeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull EpisodeViewHolder holder, int position) {
+        holder.onBind(getItem(position));
+    }
+
+    public void setOnItemClickListener(OnItemClickListener clickListener) {
+        this.onItemClickListener = clickListener;
     }
 
     public class EpisodeViewHolder extends RecyclerView.ViewHolder {

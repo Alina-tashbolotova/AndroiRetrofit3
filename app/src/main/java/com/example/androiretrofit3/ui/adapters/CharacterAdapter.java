@@ -27,9 +27,22 @@ public class CharacterAdapter extends ListAdapter<CharacterModel, CharacterAdapt
         super(new CharacterDiffUtil());
     }
 
+    public static class CharacterDiffUtil extends DiffUtil.ItemCallback<CharacterModel> {
+        @Override
+        public boolean areItemsTheSame(@NonNull @NotNull CharacterModel oldItem, @NonNull @NotNull CharacterModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull @NotNull CharacterModel oldItem, @NonNull @NotNull CharacterModel newItem) {
+            return oldItem == newItem;
+        }
+    }
+
     @NotNull
     @Override
-    public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CharacterAdapter.CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CharacterViewHolder(
                 ItemCharacterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
@@ -47,18 +60,6 @@ public class CharacterAdapter extends ListAdapter<CharacterModel, CharacterAdapt
         this.onLongItemClickListener = longItemClickListener;
     }
 
-    public static class CharacterDiffUtil extends DiffUtil.ItemCallback<CharacterModel> {
-        @Override
-        public boolean areItemsTheSame(@NonNull @NotNull CharacterModel oldItem, @NonNull @NotNull CharacterModel newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        @Override
-        public boolean areContentsTheSame(@NonNull @NotNull CharacterModel oldItem, @NonNull @NotNull CharacterModel newItem) {
-            return oldItem == newItem;
-        }
-    }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
