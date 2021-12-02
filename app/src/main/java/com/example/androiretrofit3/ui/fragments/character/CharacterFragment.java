@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,18 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiretrofit3.base.BaseFragment;
+import com.example.androiretrofit3.data.network.dtos.character.CharacterModel;
 import com.example.androiretrofit3.databinding.FragmentCharacterBinding;
 import com.example.androiretrofit3.ui.adapters.CharacterAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class CharacterFragment extends BaseFragment<CharacterViewModel, FragmentCharacterBinding> {
 
     private final CharacterAdapter characterAdapter = new CharacterAdapter();
+    private final ArrayList<CharacterModel> characterModels = new ArrayList<>();
     public LinearLayoutManager linearLayoutManager;
-    private int visibleItemCount;
-    private int totalItemCount;
-    private int postVisibleItems;
+    private int visibleItemCount, totalItemCount, postVisibleItems;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -46,17 +49,25 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
 
     @Override
     protected void setupListeners() {
-        characterAdapter.setOnItemClickListener(id -> Navigation.findNavController(requireView()).navigate(
-                CharacterFragmentDirections.actionNavigationCharacterToNavigationCharacterDetail().setId(id)));
+        characterAdapter.setOnItemClickListener((id, name) -> {
+            if (internetCheck()) {
+                Navigation.findNavController(requireView()).navigate(
+                        CharacterFragmentDirections.actionNavigationCharacterToNavigationCharacterDetail(id, name));
+                Toast.makeText(CharacterFragment.this.requireContext(), "Click position" + id, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(CharacterFragment.this.getContext(), "Нет интернета!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        characterAdapter.setOnLongItemClickListener((position, characterModel) -> {
+            Navigation.findNavController(requireView()).navigate(
+                    CharacterFragmentDirections.actionNavigationCharacterToCharacterDialogFragment(characterModel.getImage())
+            );
+        });
 
-        characterAdapter.setOnLongItemClickListener((position, characterModel) -> Navigation.findNavController(requireView()).navigate(
-                CharacterFragmentDirections.actionNavigationCharacterToCharacterDialogFragment(characterModel.getImage())
-        ));
     }
 
     @Override
     protected void setupRequest() {
-        viewModel.fetchCharacters();
         binding.recyclerCharacter.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -79,7 +90,8 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
                         viewModel.page++;
                         viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterModel -> {
                             if (characterModel != null) {
-                                characterAdapter.submitList(characterModel.getResult());
+                                characterModels.addAll(characterModel.getResult());
+                                characterAdapter.submitList(characterModels);
                             }
                         });
 
@@ -91,7 +103,12 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
 
     @Override
     protected void setupObservers() {
-        viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterModel -> characterAdapter.submitList(characterModel.getResult()));
+        if (internetCheck()) {
+            viewModel.fetchCharacters().observe(getViewLifecycleOwner(), characterModel ->
+                    characterAdapter.submitList(characterModel.getResult()));
+        } else {
+            characterAdapter.submitList((ArrayList<CharacterModel>) viewModel.getCharacters());
+        }
         viewModel.liveDataCharacter().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.progressBarCharacter.setVisibility(View.VISIBLE);
@@ -102,6 +119,7 @@ public class CharacterFragment extends BaseFragment<CharacterViewModel, Fragment
             }
         });
     }
+
 
     @Override
     public void onDestroyView() {

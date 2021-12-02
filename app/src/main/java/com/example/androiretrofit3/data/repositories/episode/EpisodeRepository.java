@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androiretrofit3.App;
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.episode.EpisodeModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +28,7 @@ public class EpisodeRepository {
             @Override
             public void onResponse(@NotNull Call<RickAndMortyResponse<EpisodeModel>> call, @NotNull Response<RickAndMortyResponse<EpisodeModel>> response) {
                 if (response.body() != null) {
+                    App.episodeDao.InsertAll(response.body().getResult());
                     _episode.setValue(response.body());
                     _isLoading.setValue(false);
                 }
@@ -38,5 +41,9 @@ public class EpisodeRepository {
             }
         });
         return _episode;
+    }
+
+    public List<EpisodeModel> getEpisodes() {
+        return App.episodeDao.getAll();
     }
 }

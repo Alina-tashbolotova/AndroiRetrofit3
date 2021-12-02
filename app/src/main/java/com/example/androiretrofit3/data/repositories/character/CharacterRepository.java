@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androiretrofit3.App;
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.character.CharacterModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.character.CharacterModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +28,7 @@ public class CharacterRepository {
             @Override
             public void onResponse(@NotNull Call<RickAndMortyResponse<CharacterModel>> call, @NotNull Response<RickAndMortyResponse<CharacterModel>> response) {
                 if (response.body() != null) {
+                    App.characterDao.InsertAll(response.body().getResult());
                     _character.setValue(response.body());
                     _isLoading.setValue(false);
                 }
@@ -38,6 +41,10 @@ public class CharacterRepository {
             }
         });
         return _character;
+    }
+
+    public List<CharacterModel> getCharacters() {
+        return App.characterDao.getAll();
     }
 
 

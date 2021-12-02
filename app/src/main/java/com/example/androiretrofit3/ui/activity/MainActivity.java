@@ -9,7 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.androiretrofit3.R;
-import com.example.androiretrofit3.data.models.character.CharacterModel;
 import com.example.androiretrofit3.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

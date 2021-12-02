@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androiretrofit3.data.models.location.LocationModel;
+import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 import com.example.androiretrofit3.databinding.ItemLocationBinding;
 import com.example.androiretrofit3.interfaces.OnItemClickListener;
 
@@ -21,20 +21,6 @@ public class LocationAdapter extends ListAdapter<LocationModel, LocationAdapter.
 
     public LocationAdapter() {
         super(new LocationDiffUtil());
-    }
-
-    public static class LocationDiffUtil extends DiffUtil.ItemCallback<LocationModel> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        @Override
-        public boolean areContentsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
-            return oldItem == newItem;
-        }
     }
 
     @NonNull
@@ -53,6 +39,19 @@ public class LocationAdapter extends ListAdapter<LocationModel, LocationAdapter.
         this.onItemClickListener = clickListener;
     }
 
+    public static class LocationDiffUtil extends DiffUtil.ItemCallback<LocationModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull @NotNull LocationModel oldItem, @NonNull @NotNull LocationModel newItem) {
+            return oldItem == newItem;
+        }
+    }
 
     public class LocationViewHolder extends RecyclerView.ViewHolder {
 
@@ -66,7 +65,7 @@ public class LocationAdapter extends ListAdapter<LocationModel, LocationAdapter.
         public void onBind(LocationModel locationModel) {
             binding.itemIdLocation.setText(String.valueOf(locationModel.getId()));
             binding.txtItemName.setText(String.valueOf(locationModel.getName()));
-            binding.getRoot().setOnClickListener(v -> onItemClickListener.itemClick(locationModel.getId()));
+            binding.getRoot().setOnClickListener(v -> onItemClickListener.itemClick(locationModel.getId(), locationModel.getName()));
         }
     }
 }

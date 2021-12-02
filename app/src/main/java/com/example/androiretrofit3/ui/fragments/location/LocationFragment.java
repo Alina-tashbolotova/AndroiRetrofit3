@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
@@ -13,20 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiretrofit3.base.BaseFragment;
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.location.LocationModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 import com.example.androiretrofit3.databinding.FragmentLocationBinding;
 import com.example.androiretrofit3.ui.adapters.LocationAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLocationBinding> {
 
     private final LocationAdapter locationAdapter = new LocationAdapter();
+    private final ArrayList<LocationModel> locationModels = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
-    private int visibleItemCount;
-    private int totalItemCount;
-    private int postVisibleItems;
+    private int visibleItemCount, totalItemCount, postVisibleItems;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -49,14 +51,19 @@ public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLo
 
     @Override
     protected void setupListeners() {
-        locationAdapter.setOnItemClickListener(id -> Navigation.findNavController(requireView()).navigate(
-                LocationFragmentDirections.actionNavigationLocationToLocationDetailFragment(id)
-        ));
+        locationAdapter.setOnItemClickListener((id, name) -> {
+            if (internetCheck()) {
+                Navigation.findNavController(requireView()).navigate(
+                        LocationFragmentDirections.actionNavigationLocationToLocationDetailFragment(id));
+                Toast.makeText(LocationFragment.this.requireContext(), "Click position" + id, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LocationFragment.this.getContext(), "Нет интернета!!!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     protected void setupRequest() {
-        viewModel.fetchLocations();
         viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
             if (locationModel != null) {
                 locationAdapter.submitList(locationModel.getResult());
@@ -86,7 +93,8 @@ public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLo
                                         @Override
                                         public void onChanged(RickAndMortyResponse<LocationModel> locationModel) {
                                             if (locationModel != null) {
-                                                locationAdapter.submitList(locationModel.getResult());
+                                                locationModels.addAll(locationModel.getResult());
+                                                locationAdapter.submitList(locationModels);
                                             }
                                         }
                                     });
@@ -101,7 +109,12 @@ public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLo
 
     @Override
     protected void setupObservers() {
-        viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> locationAdapter.submitList(locationModel.getResult()));
+        if (internetCheck()) {
+            viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel ->
+                    locationAdapter.submitList(locationModel.getResult()));
+        } else {
+            locationAdapter.submitList((ArrayList<LocationModel>) viewModel.getLocations());
+        }
         viewModel.liveDataLocation().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.progressBarLocation.setVisibility(View.VISIBLE);

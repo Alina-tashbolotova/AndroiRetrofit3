@@ -3,7 +3,7 @@ package com.example.androiretrofit3.data.repositories.location;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androiretrofit3.App;
-import com.example.androiretrofit3.data.models.location.LocationModel;
+import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 
 import org.jetbrains.annotations.NotNull;
 

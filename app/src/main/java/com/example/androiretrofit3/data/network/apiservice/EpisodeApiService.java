@@ -1,7 +1,7 @@
 package com.example.androiretrofit3.data.network.apiservice;
 
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.episode.EpisodeModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,6 +18,5 @@ public interface EpisodeApiService {
     @GET("/api/episode/{id}")
     Call<EpisodeModel> fetchEpisode(
             @Path("id") int id
-
     );
 }

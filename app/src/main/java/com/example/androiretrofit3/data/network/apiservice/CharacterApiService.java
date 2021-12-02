@@ -1,7 +1,7 @@
 package com.example.androiretrofit3.data.network.apiservice;
 
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.character.CharacterModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.character.CharacterModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,6 +18,5 @@ public interface CharacterApiService {
     @GET("/api/character/{id}")
     Call<CharacterModel> fetchCharacter(
             @Path("id") int id
-
     );
 }

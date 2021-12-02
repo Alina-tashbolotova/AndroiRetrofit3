@@ -14,4 +14,6 @@
     <dimen name="dp165">165dp</dimen>
     <dimen name="dp150">150dp</dimen>
     <dimen name="dp50">50dp</dimen>
+    <dimen name="dp145">145dp</dimen>
+    <dimen name="dp158">158dp</dimen>
 </resources>

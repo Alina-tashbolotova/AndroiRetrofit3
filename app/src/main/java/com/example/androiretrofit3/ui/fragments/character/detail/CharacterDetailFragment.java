@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.androiretrofit3.R;
 import com.example.androiretrofit3.base.BaseFragment;
 import com.example.androiretrofit3.databinding.FragmentCharacterDetailBinding;
 
@@ -42,6 +43,17 @@ public class CharacterDetailFragment extends BaseFragment<CharacterDetailViewMod
                     binding.txtItemNameDetail.setText(String.valueOf(characterModel.getName()));
                     binding.txtItemStatusDetail.setText(String.valueOf(characterModel.getStatus()));
                     binding.txtItemCharacterType.setText(String.valueOf(characterModel.getType()));
+                    if (characterModel.getStatus() != null) {
+                        switch (characterModel.getStatus()) {
+                            case "Alive":
+                                binding.viewStatusDetail.setBackgroundResource(R.drawable.oval);
+                                break;
+                            case "Dead":
+                                binding.viewStatusDetail.setBackgroundResource(R.drawable.oval2);
+                                break;
+
+                        }
+                    }
                 });
         viewModel.fetchLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androiretrofit3.data.models.episode.EpisodeModel;
+import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 import com.example.androiretrofit3.databinding.ItemEpisodeBinding;
 import com.example.androiretrofit3.interfaces.OnItemClickListener;
 
@@ -21,20 +21,6 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Epi
 
     public EpisodeAdapter() {
         super(new EpisodeDiffUtil());
-    }
-
-    public static class EpisodeDiffUtil extends DiffUtil.ItemCallback<EpisodeModel> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull @NotNull EpisodeModel oldItem, @NonNull @NotNull EpisodeModel newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @SuppressLint("DiffUtilEquals")
-        @Override
-        public boolean areContentsTheSame(@NonNull @NotNull EpisodeModel oldItem, @NonNull @NotNull EpisodeModel newItem) {
-            return oldItem == newItem;
-        }
     }
 
     @NonNull
@@ -53,6 +39,20 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Epi
         this.onItemClickListener = clickListener;
     }
 
+    public static class EpisodeDiffUtil extends DiffUtil.ItemCallback<EpisodeModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull @NotNull EpisodeModel oldItem, @NonNull @NotNull EpisodeModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull @NotNull EpisodeModel oldItem, @NonNull @NotNull EpisodeModel newItem) {
+            return oldItem == newItem;
+        }
+    }
+
     public class EpisodeViewHolder extends RecyclerView.ViewHolder {
 
         ItemEpisodeBinding binding;
@@ -65,7 +65,7 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Epi
         public void onBind(EpisodeModel episodeModel) {
             binding.txtItemIdEpisode.setText(String.valueOf(episodeModel.getId()));
             binding.txtItemNameEpisode.setText(String.valueOf(episodeModel.getName()));
-            binding.getRoot().setOnClickListener(v -> onItemClickListener.itemClick(episodeModel.getId()));
+            binding.getRoot().setOnClickListener(v -> onItemClickListener.itemClick(episodeModel.getId(), episodeModel.getName()));
         }
     }
 }

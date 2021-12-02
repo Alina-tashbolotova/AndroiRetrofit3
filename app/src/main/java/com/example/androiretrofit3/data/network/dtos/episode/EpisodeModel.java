@@ -1,28 +1,30 @@
-package com.example.androiretrofit3.data.models.location;
+package com.example.androiretrofit3.data.network.dtos.episode;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-public class LocationModel {
+@Entity
+public class EpisodeModel {
 
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     private int id;
 
     @SerializedName("name")
     private String name;
 
-    @SerializedName("dimension")
-    private String dimension;
+    @SerializedName("episode")
+    private String episode;
 
     @SerializedName("created")
     private String created;
 
-    @SerializedName("type")
-    private String type;
-
-    public LocationModel() {
-    }
+    @SerializedName("ait_date")
+    private String air_date;
 
     public int getId() {
         return id;
@@ -40,12 +42,12 @@ public class LocationModel {
         this.name = name;
     }
 
-    public String getDimension() {
-        return dimension;
+    public String getEpisode() {
+        return episode;
     }
 
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
+    public void setEpisode(String episode) {
+        this.episode = episode;
     }
 
     public String getCreated() {
@@ -56,20 +58,20 @@ public class LocationModel {
         this.created = created;
     }
 
-    public String getType() {
-        return type;
+    public String getAir_date() {
+        return air_date;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAir_date(String air_date) {
+        this.air_date = air_date;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LocationModel locationModel = (LocationModel) o;
-        return id == locationModel.id && Objects.equals(name, locationModel.name);
+        EpisodeModel episodeModel = (EpisodeModel) o;
+        return id == episodeModel.id && Objects.equals(name, episodeModel.name);
     }
 
     @Override

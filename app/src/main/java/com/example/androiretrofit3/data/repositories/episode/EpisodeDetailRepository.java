@@ -3,7 +3,7 @@ package com.example.androiretrofit3.data.repositories.episode;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androiretrofit3.App;
-import com.example.androiretrofit3.data.models.episode.EpisodeModel;
+import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 
 import org.jetbrains.annotations.NotNull;
 

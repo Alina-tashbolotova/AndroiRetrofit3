@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.androiretrofit3.App;
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.location.LocationModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +28,7 @@ public class LocationRepository {
             @Override
             public void onResponse(@NotNull Call<RickAndMortyResponse<LocationModel>> call, @NotNull Response<RickAndMortyResponse<LocationModel>> response) {
                 if (response.body() != null) {
+                    App.locationDao.InsertAll(response.body().getResult());
                     _location.setValue(response.body());
                     _isLoading.setValue(false);
                 }
@@ -38,6 +41,10 @@ public class LocationRepository {
             }
         });
         return _location;
+    }
+
+    public List<LocationModel> getLocations() {
+        return App.locationDao.getAll();
     }
 
 

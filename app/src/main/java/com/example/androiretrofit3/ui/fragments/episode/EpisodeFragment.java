@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
@@ -13,20 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiretrofit3.base.BaseFragment;
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.episode.EpisodeModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 import com.example.androiretrofit3.databinding.FragmentEpisodeBinding;
 import com.example.androiretrofit3.ui.adapters.EpisodeAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpisodeBinding> {
 
     private final EpisodeAdapter episodeAdapter = new EpisodeAdapter();
+    private final ArrayList<EpisodeModel> episodeModels = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
-    private int visibleItemCount;
-    private int totalItemCount;
-    private int postVisibleItems;
+    private int visibleItemCount, totalItemCount, postVisibleItems;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -45,18 +47,26 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
         linearLayoutManager = new LinearLayoutManager(requireContext());
         binding.recyclerEpisode.setLayoutManager(linearLayoutManager);
         binding.recyclerEpisode.setAdapter(episodeAdapter);
+
     }
 
     @Override
     protected void setupListeners() {
-        episodeAdapter.setOnItemClickListener(id -> Navigation.findNavController(requireView()).navigate(
-                EpisodeFragmentDirections.actionNavigationEpisodeToEpisodeDetailFragment(id)
-        ));
+        episodeAdapter.setOnItemClickListener((id, name) -> {
+            if (internetCheck()) {
+                Navigation.findNavController(requireView()).navigate(
+                        EpisodeFragmentDirections.actionNavigationEpisodeToEpisodeDetailFragment(id));
+                Toast.makeText(EpisodeFragment.this.requireContext(), "Click position" + id, Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(EpisodeFragment.this.getContext(), "Нет интернета!!!", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     @Override
     protected void setupRequest() {
-        viewModel.fetchEpisodes();
         viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<EpisodeModel>>() {
             @Override
             public void onChanged(RickAndMortyResponse<EpisodeModel> episodeModel) {
@@ -85,9 +95,11 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
                                     postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
                                     if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
                                         viewModel.page++;
+
                                         viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel -> {
                                             if (episodeModel != null) {
-                                                episodeAdapter.submitList(episodeModel.getResult());
+                                                episodeModels.addAll(episodeModel.getResult());
+                                                episodeAdapter.submitList(episodeModels);
                                             }
                                         });
                                     }
@@ -102,7 +114,13 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
 
     @Override
     protected void setupObservers() {
-        viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel -> episodeAdapter.submitList(episodeModel.getResult()));
+        if (internetCheck()) {
+            viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel ->
+                    episodeAdapter.submitList(episodeModel.getResult()));
+
+        } else {
+            episodeAdapter.submitList((ArrayList<EpisodeModel>) viewModel.getEpisodes());
+        }
         viewModel.liveDataEpisode().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.progressBarEpisode.setVisibility(View.VISIBLE);
@@ -113,6 +131,7 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
             }
         });
     }
+
 
     @Override
     public void onDestroyView() {

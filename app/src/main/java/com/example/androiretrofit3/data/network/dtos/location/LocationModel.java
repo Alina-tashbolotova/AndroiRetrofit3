@@ -1,25 +1,33 @@
-package com.example.androiretrofit3.data.models.episode;
+package com.example.androiretrofit3.data.network.dtos.location;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-public class EpisodeModel {
+@Entity
+public class LocationModel {
 
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     private int id;
 
     @SerializedName("name")
     private String name;
 
-    @SerializedName("episode")
-    private String episode;
+    @SerializedName("dimension")
+    private String dimension;
 
     @SerializedName("created")
     private String created;
 
-    @SerializedName("ait_date")
-    private String air_date;
+    @SerializedName("type")
+    private String type;
+
+    public LocationModel() {
+    }
 
     public int getId() {
         return id;
@@ -37,12 +45,12 @@ public class EpisodeModel {
         this.name = name;
     }
 
-    public String getEpisode() {
-        return episode;
+    public String getDimension() {
+        return dimension;
     }
 
-    public void setEpisode(String episode) {
-        this.episode = episode;
+    public void setDimension(String dimension) {
+        this.dimension = dimension;
     }
 
     public String getCreated() {
@@ -53,20 +61,20 @@ public class EpisodeModel {
         this.created = created;
     }
 
-    public String getAir_date() {
-        return air_date;
+    public String getType() {
+        return type;
     }
 
-    public void setAir_date(String air_date) {
-        this.air_date = air_date;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EpisodeModel episodeModel = (EpisodeModel) o;
-        return id == episodeModel.id && Objects.equals(name, episodeModel.name);
+        LocationModel locationModel = (LocationModel) o;
+        return id == locationModel.id && Objects.equals(name, locationModel.name);
     }
 
     @Override

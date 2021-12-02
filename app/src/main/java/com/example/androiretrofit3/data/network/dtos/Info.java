@@ -1,4 +1,4 @@
-package com.example.androiretrofit3.data.models;
+package com.example.androiretrofit3.data.network.dtos;
 
 import com.google.gson.annotations.SerializedName;
 

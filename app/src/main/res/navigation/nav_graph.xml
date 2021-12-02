@@ -20,12 +20,16 @@
     <fragment
         android:id="@+id/navigation_characterDetail"
         android:name="com.example.androiretrofit3.ui.fragments.character.detail.CharacterDetailFragment"
-        android:label="CharacterDetail"
+        android:label="{label}"
         tools:layout="@layout/fragment_character_detail">
+
         <argument
             android:name="id"
-            android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="label"
+            app:argType="string" />
+
     </fragment>
     <fragment
         android:id="@+id/navigation_episode"

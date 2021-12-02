@@ -1,11 +1,14 @@
-package com.example.androiretrofit3.data.models.character;
+package com.example.androiretrofit3.data.network.dtos.character;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Objects;
-
+@Entity
 public class CharacterModel {
 
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     private int id;
 
@@ -61,16 +64,16 @@ public class CharacterModel {
         this.type = type;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CharacterModel characterModel = (CharacterModel) o;
-        return id == characterModel.id && Objects.equals(name, characterModel.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        CharacterModel characterModel = (CharacterModel) o;
+//        return id == characterModel.id && Objects.equals(name, characterModel.name);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, name);
+//    }
 }

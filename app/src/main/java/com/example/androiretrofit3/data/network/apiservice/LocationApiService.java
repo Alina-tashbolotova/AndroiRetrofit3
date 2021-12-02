@@ -1,7 +1,7 @@
 package com.example.androiretrofit3.data.network.apiservice;
 
-import com.example.androiretrofit3.data.models.RickAndMortyResponse;
-import com.example.androiretrofit3.data.models.location.LocationModel;
+import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
+import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
