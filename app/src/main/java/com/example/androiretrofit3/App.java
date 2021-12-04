@@ -11,29 +11,9 @@ import com.example.androiretrofit3.data.network.apiservice.CharacterApiService;
 import com.example.androiretrofit3.data.network.apiservice.EpisodeApiService;
 import com.example.androiretrofit3.data.network.apiservice.LocationApiService;
 
+import dagger.hilt.android.HiltAndroidApp;
+
+@HiltAndroidApp
 public class App extends Application {
 
-    public static CharacterApiService characterApiService;
-    public static EpisodeApiService episodeApiService;
-    public static LocationApiService locationApiService;
-    public static CharacterDao characterDao;
-    public static EpisodeDao episodeDao;
-    public static LocationDao locationDao;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        RetrofitClient retrofitClient = new RetrofitClient();
-
-        characterApiService = retrofitClient.provideCharacterApiService();
-        episodeApiService = retrofitClient.provideEpisodeApiService();
-        locationApiService = retrofitClient.provideLocationAPiService();
-
-        RoomClient roomClient = new RoomClient();
-
-        characterDao = roomClient.provideCharacterDao(roomClient.provideDataBase(this));
-        episodeDao = roomClient.provideEpisodeDao(roomClient.provideDataBase(this));
-        locationDao = roomClient.provideLocationDao(roomClient.provideDataBase(this));
-    }
 }

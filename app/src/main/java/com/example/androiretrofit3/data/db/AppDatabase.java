@@ -11,7 +11,7 @@ import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
 
 @Database(entities = {CharacterModel.class, EpisodeModel.class, LocationModel.class},version = 1)
-abstract class AppDatabase extends RoomDatabase {
+public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CharacterDao characterDao();
     public abstract EpisodeDao episodeDao();

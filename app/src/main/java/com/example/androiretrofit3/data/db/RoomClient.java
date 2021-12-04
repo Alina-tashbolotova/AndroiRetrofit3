@@ -4,9 +4,9 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.androiretrofit3.data.db.daos.CharacterDao;
 import com.example.androiretrofit3.data.db.daos.EpisodeDao;
 import com.example.androiretrofit3.data.db.daos.LocationDao;
+import com.example.androiretrofit3.data.db.daos.CharacterDao;
 
 public class RoomClient {
 

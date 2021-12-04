@@ -12,6 +12,9 @@ import com.example.androiretrofit3.databinding.FragmentLocationDetailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class LocationDetailFragment extends BaseFragment<LocationDetailViewModel, FragmentLocationDetailBinding> {
 
     @Override

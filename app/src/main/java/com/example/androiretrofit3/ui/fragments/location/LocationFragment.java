@@ -23,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLocationBinding> {
 
     private final LocationAdapter locationAdapter = new LocationAdapter();
@@ -64,54 +67,49 @@ public class LocationFragment extends BaseFragment<LocationViewModel, FragmentLo
 
     @Override
     protected void setupRequest() {
-        viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
-            if (locationModel != null) {
-                locationAdapter.submitList(locationModel.getResult());
-                String next = locationModel.getInfo().getNext();
-                if (next != null) {
-                    binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-                            if (dy > 0) {
-                                viewModel.liveDataLocation().observe(getViewLifecycleOwner(), isLoading -> {
-                                    if (isLoading) {
-                                        binding.progressBarLocationPage.setVisibility(View.GONE);
-                                        binding.recyclerLocation.setVisibility(View.VISIBLE);
-                                        binding.progressBarLocation.setVisibility(View.GONE);
-                                        binding.progressBarLocationPage.setVisibility(View.VISIBLE);
-                                    } else {
-                                        binding.progressBarLocationPage.setVisibility(View.GONE);
-                                    }
-                                });
-                                visibleItemCount = linearLayoutManager.getChildCount();
-                                totalItemCount = linearLayoutManager.getItemCount();
-                                postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                                if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
-                                    viewModel.page++;
-                                    viewModel.fetchLocations().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<LocationModel>>() {
-                                        @Override
-                                        public void onChanged(RickAndMortyResponse<LocationModel> locationModel) {
-                                            if (locationModel != null) {
-                                                locationModels.addAll(locationModel.getResult());
-                                                locationAdapter.submitList(locationModels);
-                                            }
-                                        }
-                                    });
-                                }
-                            }
+        binding.recyclerLocation.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    viewModel.liveDataLocation().observe(getViewLifecycleOwner(), isLoading -> {
+                        if (isLoading) {
+                            binding.progressBarLocationPage.setVisibility(View.GONE);
+                            binding.recyclerLocation.setVisibility(View.VISIBLE);
+                            binding.progressBarLocation.setVisibility(View.GONE);
+                            binding.progressBarLocationPage.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.progressBarLocationPage.setVisibility(View.GONE);
                         }
                     });
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
+                        viewModel.page++;
+                        viewModel.fetchLocations().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<LocationModel>>() {
+                            @Override
+                            public void onChanged(RickAndMortyResponse<LocationModel> locationModel) {
+                                if (locationModel != null) {
+                                    locationModels.addAll(locationModel.getResult());
+                                    locationAdapter.submitList(locationModels);
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
     }
 
+
     @Override
     protected void setupObservers() {
         if (internetCheck()) {
-            viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel ->
-                    locationAdapter.submitList(locationModel.getResult()));
+            viewModel.fetchLocations().observe(getViewLifecycleOwner(), locationModel -> {
+                locationModels.addAll(locationModel.getResult());
+                locationAdapter.submitList(locationModels);
+            });
         } else {
             locationAdapter.submitList((ArrayList<LocationModel>) viewModel.getLocations());
         }

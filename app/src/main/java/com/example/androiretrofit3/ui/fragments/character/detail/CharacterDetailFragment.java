@@ -14,6 +14,9 @@ import com.example.androiretrofit3.databinding.FragmentCharacterDetailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class CharacterDetailFragment extends BaseFragment<CharacterDetailViewModel, FragmentCharacterDetailBinding> {
 
     @Override

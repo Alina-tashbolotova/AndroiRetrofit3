@@ -4,17 +4,27 @@ import androidx.lifecycle.LiveData;
 
 import com.example.androiretrofit3.base.BaseViewModel;
 import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
-import com.example.androiretrofit3.data.repositories.episode.EpisodeDetailRepository;
+import com.example.androiretrofit3.data.repositories.episode.EpisodeRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class EpisodeDetailViewModel extends BaseViewModel {
 
-    private final EpisodeDetailRepository episodeDetailRepository = new EpisodeDetailRepository();
+    private final EpisodeRepository episodeRepository;
+
+    @Inject
+    public EpisodeDetailViewModel(EpisodeRepository episodeRepository) {
+        this.episodeRepository = episodeRepository;
+    }
 
     public LiveData<EpisodeModel> fetchEpisode(int id) {
-        return episodeDetailRepository.fetchEpisode(id);
+        return episodeRepository.fetchEpisode(id);
     }
 
     public LiveData<Boolean> fetchLoading() {
-        return episodeDetailRepository._isLoading;
+        return episodeRepository._isLoading;
     }
 }

@@ -9,10 +9,20 @@ import com.example.androiretrofit3.data.repositories.episode.EpisodeRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class EpisodeViewModel extends BaseViewModel {
 
+    private final EpisodeRepository episodeRepository;
     public int page = 1;
-    private final EpisodeRepository episodeRepository = new EpisodeRepository();
+
+    @Inject
+    public EpisodeViewModel(EpisodeRepository episodeRepository) {
+        this.episodeRepository = episodeRepository;
+    }
 
     public LiveData<RickAndMortyResponse<EpisodeModel>> fetchEpisodes() {
         return episodeRepository.fetchEpisodes(page);
@@ -22,7 +32,7 @@ public class EpisodeViewModel extends BaseViewModel {
         return episodeRepository._isLoading;
     }
 
-    public List<EpisodeModel> getEpisodes(){
+    public List<EpisodeModel> getEpisodes() {
         return episodeRepository.getEpisodes();
     }
 }

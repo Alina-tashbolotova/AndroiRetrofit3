@@ -12,6 +12,9 @@ import com.example.androiretrofit3.databinding.FragmentEpisodeDetailBinding;
 
 import org.jetbrains.annotations.NotNull;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class EpisodeDetailFragment extends BaseFragment<EpisodeDetailViewModel, FragmentEpisodeDetailBinding> {
 
     @Override

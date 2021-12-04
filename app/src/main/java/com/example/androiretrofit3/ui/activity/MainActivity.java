@@ -11,6 +11,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.androiretrofit3.R;
 import com.example.androiretrofit3.databinding.ActivityMainBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;

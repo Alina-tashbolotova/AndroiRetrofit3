@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiretrofit3.base.BaseFragment;
-import com.example.androiretrofit3.data.network.dtos.RickAndMortyResponse;
 import com.example.androiretrofit3.data.network.dtos.episode.EpisodeModel;
 import com.example.androiretrofit3.databinding.FragmentEpisodeBinding;
 import com.example.androiretrofit3.ui.adapters.EpisodeAdapter;
@@ -23,6 +21,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpisodeBinding> {
 
     private final EpisodeAdapter episodeAdapter = new EpisodeAdapter();
@@ -66,58 +67,12 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
     }
 
     @Override
-    protected void setupRequest() {
-        viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), new Observer<RickAndMortyResponse<EpisodeModel>>() {
-            @Override
-            public void onChanged(RickAndMortyResponse<EpisodeModel> episodeModel) {
-                if (episodeModel != null) {
-                    episodeAdapter.submitList(episodeModel.getResult());
-                    String next = episodeModel.getInfo().getNext();
-                    if (next != null) {
-                        binding.recyclerEpisode.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
-                                if (dy > 0) {
-
-                                    viewModel.liveDataEpisode().observe(getViewLifecycleOwner(), isLoading -> {
-                                        if (isLoading) {
-                                            binding.progressBarEpisodePage.setVisibility(View.GONE);
-                                            binding.recyclerEpisode.setVisibility(View.VISIBLE);
-                                            binding.progressBarEpisode.setVisibility(View.GONE);
-                                            binding.progressBarEpisodePage.setVisibility(View.VISIBLE);
-                                        } else {
-                                            binding.progressBarEpisodePage.setVisibility(View.GONE);
-                                        }
-                                    });
-                                    visibleItemCount = linearLayoutManager.getChildCount();
-                                    totalItemCount = linearLayoutManager.getItemCount();
-                                    postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
-                                    if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
-                                        viewModel.page++;
-
-                                        viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel -> {
-                                            if (episodeModel != null) {
-                                                episodeModels.addAll(episodeModel.getResult());
-                                                episodeAdapter.submitList(episodeModels);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
     protected void setupObservers() {
         if (internetCheck()) {
-            viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel ->
-                    episodeAdapter.submitList(episodeModel.getResult()));
-
+            viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel -> {
+                episodeModels.addAll(episodeModel.getResult());
+                episodeAdapter.submitList(episodeModels);
+            });
         } else {
             episodeAdapter.submitList((ArrayList<EpisodeModel>) viewModel.getEpisodes());
         }
@@ -132,6 +87,39 @@ public class EpisodeFragment extends BaseFragment<EpisodeViewModel, FragmentEpis
         });
     }
 
+    @Override
+    protected void setupRequest() {
+        binding.recyclerEpisode.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull @NotNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    viewModel.liveDataEpisode().observe(getViewLifecycleOwner(), isLoading -> {
+                        if (isLoading) {
+                            binding.progressBarEpisodePage.setVisibility(View.GONE);
+                            binding.recyclerEpisode.setVisibility(View.VISIBLE);
+                            binding.progressBarEpisode.setVisibility(View.GONE);
+                            binding.progressBarEpisodePage.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.progressBarEpisodePage.setVisibility(View.GONE);
+                        }
+                    });
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    postVisibleItems = linearLayoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + postVisibleItems) >= totalItemCount) {
+                        viewModel.page++;
+                        viewModel.fetchEpisodes().observe(getViewLifecycleOwner(), episodeModel -> {
+                            if (episodeModel != null) {
+                                episodeModels.addAll(episodeModel.getResult());
+                                episodeAdapter.submitList(episodeModels);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public void onDestroyView() {

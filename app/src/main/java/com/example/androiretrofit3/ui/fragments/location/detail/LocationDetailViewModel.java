@@ -4,16 +4,27 @@ import androidx.lifecycle.LiveData;
 
 import com.example.androiretrofit3.base.BaseViewModel;
 import com.example.androiretrofit3.data.network.dtos.location.LocationModel;
-import com.example.androiretrofit3.data.repositories.location.LocationDetailRepository;
+import com.example.androiretrofit3.data.repositories.location.LocationRepository;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class LocationDetailViewModel extends BaseViewModel {
 
-    private final LocationDetailRepository locationDetailRepository = new LocationDetailRepository();
+    private final LocationRepository locationRepository;
+
+    @Inject
+    public LocationDetailViewModel(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
 
     public LiveData<LocationModel> fetchLocation(int id) {
-        return locationDetailRepository.fetchLocation(id);
+        return locationRepository.fetchLocation(id);
     }
+
     public LiveData<Boolean> fetchLoading() {
-        return locationDetailRepository._isLoading;
+        return locationRepository._isLoading;
     }
 }
